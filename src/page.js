@@ -27,12 +27,13 @@ input{padding:.5rem;font-size:1rem;width:100%;box-sizing:border-box;background:v
 <script>
 var app=document.getElementById('app'),$=function(s){return document.querySelector(s)};
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
-var UNITS={x:[1,''],k:[1e3,'K'],m:[1e6,'M'],b:[1e9,'B']},unit='x';
-try{unit=localStorage.getItem('unit')||'x'}catch(e){}
+var UNITS={a:[0,'auto'],x:[1,''],k:[1e3,'K'],m:[1e6,'M'],b:[1e9,'B']},unit='a';
+try{unit=localStorage.getItem('unit')||'a'}catch(e){}
 function num(x,d){if(x==null)return '–';var u=UNITS[unit];
+if(unit=='a'){var ax=Math.abs(x);u=ax>=1e9?UNITS.b:ax>=1e6?UNITS.m:ax>=1e4?UNITS.k:UNITS.x}
 if(u[0]>1&&Math.abs(x)>=u[0])return (x/u[0]).toLocaleString('en-US',{maximumFractionDigits:1})+u[1];
 return Number(x).toLocaleString('en-US',{maximumFractionDigits:d||0})}
-function unitBar(){return [['x','Exact'],['k','Thousands'],['m','Millions'],['b','Billions']].map(function(t){return '<button data-u='+t[0]+(t[0]==unit?' class=on':'')+'>'+t[1]+'</button>'}).join('')}
+function unitBar(){return [['a','Auto'],['x','Exact'],['k','Thousands'],['m','Millions'],['b','Billions']].map(function(t){return '<button data-u='+t[0]+(t[0]==unit?' class=on':'')+'>'+t[1]+'</button>'}).join('')}
 function pct(a,b){return b?(100*a/b).toFixed(1)+'%':'–'}
 function qs(o){return Object.keys(o).map(function(k){return k+'='+encodeURIComponent(o[k])}).join('&')}
 function card(l,v,s,href){return '<'+(href?'a href="'+href+'"':'div')+' class=card><div class=l>'+l+'</div><div class=v>'+v+'</div><div class=s>'+(s||'')+'</div></'+(href?'a':'div')+'>'}
@@ -41,8 +42,9 @@ function L(p){return '#/list?'+qs(p)}
 
 function breakdown(title,rows,key,total){
   var max=Math.max.apply(null,rows.map(function(r){return r.n}));
-  return '<h3>'+title+'</h3><table><tr><th>'+esc(title)+'<th class=n>Companies<th class=n>%<th class=n>ASE-listed<th class=n>Capital (JD)<th style="width:15%"></tr>'+
-  rows.map(function(r){var p={};p[key]=r.k==null?'':r.k;return '<tr><td><a href="'+L(p)+'">'+esc(r.k||'(none)')+'</a><td class=n>'+num(r.n)+'<td class=n>'+pct(r.n,total)+'<td class=n>'+num(r.listed)+'<td class=n>'+num(r.cap)+'<td><div class=bar style="width:'+(100*r.n/max)+'%"></div></tr>'}).join('')+'</table>'}
+  return '<h3>By '+title+'</h3><p class=note>Classification of companies — all, ASE-listed and not listed</p><div class=scroll><table><tr><th>'+esc(title)+'<th class=n>All<th class=n>% of all<th class=n>Listed<th class=n>Not listed<th class=n>Capital (JD)<th style="width:10%"></tr>'+
+  rows.map(function(r){var p={};p[key]=r.k==null?'':r.k;var a=function(l){var q=Object.assign({listed:l},p);return L(q)};
+  return '<tr><td><a href="'+L(p)+'">'+esc(r.k||'(none)')+'</a><td class=n><a href="'+L(p)+'">'+num(r.n)+'</a><td class=n>'+pct(r.n,total)+'<td class=n><a href="'+a(1)+'">'+num(r.listed)+'</a><td class=n><a href="'+a(0)+'">'+num(r.n-r.listed)+'</a><td class=n>'+num(r.cap)+'<td><div class=bar style="width:'+(100*r.n/max)+'%"></div></tr>'}).join('')+'</table></div>'}
 
 function dashboard(){
   app.innerHTML='Loading…';
