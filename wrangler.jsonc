@@ -1,0 +1,11 @@
+{
+  "name": "jo-ccd",
+  "main": "src/index.js",
+  "compatibility_date": "2026-10-01",
+  "d1_databases": [
+    { "binding": "DB", "database_name": "jo-ccd", "database_id": "28de9c33-0464-4ac3-8e67-36e30c3fb1f4" }
+  ],
+  "routes": [
+    { "pattern": "jo-co.can-du-ai.com", "custom_domain": true }
+  ]
+}
