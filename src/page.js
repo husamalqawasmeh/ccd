@@ -67,12 +67,12 @@ function dashboard(){
       card('Avg share price (JD)',num(A.avgprice,2),'simple average',L({listed:1,priced:1,sort:'mcap'}))+
       card('Trading above par',num(A.above_par),'market cap &gt; capital',L({listed:1,priced:1}))+
       card('Trading below par',num(A.below_par),'market cap &lt; capital',L({listed:1,priced:1,dir:'asc',sort:'mcap'}))+
-    '</div></div><h2>Partners in unlisted companies</h2><div class=grid>'+
+    '</div></div><div class=panel><h2>Partners in unlisted companies</h2><div class=grid>'+
       card('Companies with partner data',num(P.companies),pct(P.companies,P.unlisted)+' of '+num(P.unlisted)+' unlisted',L({listed:0,haspartners:1,sort:'partners'}))+
       card('Partner records',num(P.rows),'',L({listed:0,haspartners:1,sort:'partners'}))+
       card('Avg partners / company',(P.rows/P.companies).toFixed(2),'among companies with partner data',L({listed:0,haspartners:1,sort:'partners'}))+
       card('Distinct partners',num(P.people),'unique names','#/people')+
-    '</div><div class=two><div>'+
+    '</div></div><div class=two><div>'+
       breakdown('Type',s.byType,'type',tot)+'</div><div>'+breakdown('Status',s.byStatus,'status',tot)+'</div></div>'+
     '<div class=two><div>'+breakdown('Governorate',s.byGov,'gov',tot)+'</div><div>'+breakdown('Share data source',s.bySrc,'src',tot)+'</div></div>'+
     '<div class=two><div><h3>Top ASE by market cap</h3><table><tr><th>Company<th>Symbol<th class=n>Market cap (JD)</tr>'+
