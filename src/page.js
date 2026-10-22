@@ -128,7 +128,7 @@ function person(sp){
     '<div class=scroll><table><tr>'+(fam?'<th>Partner':'')+'<th>Company<th>Role<th class=n>Shares<th class=n>Value (JD)</tr>'+
     rows.map(function(r){return '<tr>'+(fam?'<td><a href="#/person?name='+encodeURIComponent(r.partner)+'">'+esc(r.partner)+'</a>':'')+'<td><a href="#/c/'+r.national_id+'">'+esc(r.company)+'</a><td>'+esc(r.role)+'<td class=n>'+num(r.shares)+'<td class=n>'+num(r.value)+'</tr>'}).join('')+'</table></div>'})}
 
-function setUnits(){$('#units').innerHTML='unitBar()}
+function setUnits(){$('#units').innerHTML=unitBar()}
 $('#units').onchange=function(e){if(e.target.id=='swc'){unit=e.target.checked?'a':'x';try{localStorage.setItem('unit',unit)}catch(x){}route()}};
 function route(){setUnits();
   var h=location.hash||'#/',m;
