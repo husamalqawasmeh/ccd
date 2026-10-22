@@ -1,8 +1,8 @@
 export const PAGE = String.raw`<!doctype html><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1">
 <title>Jordan Companies Overview</title>
 <style>
-:root{--bg:#f6f7f9;--fg:#1c2330;--mut:#667085;--card:#fff;--line:#e2e5ea;--acc:#1f6feb}
-@media(prefers-color-scheme:dark){:root{--bg:#0f1218;--fg:#e6e9ef;--mut:#9aa3b2;--card:#171c26;--line:#262d3a;--acc:#5b9dff}}
+:root{--bg:#e3e7ee;--fg:#1c2330;--mut:#5b6678;--card:#ffffff;--line:#d3d9e3;--acc:#1f6feb;--panel:#ffffff;--pline:#b9c2d0;--inner:#eef2f8;--iline:#c6cedb}
+@media(prefers-color-scheme:dark){:root{--bg:#080b10;--fg:#e6e9ef;--mut:#9aa3b2;--card:#151a24;--line:#2a3242;--acc:#5b9dff;--panel:#151a24;--pline:#34405a;--inner:#242d3f;--iline:#3d4a63}}
 body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--fg);margin:0}
 main{max-width:1100px;margin:0 auto;padding:1rem}
 a{color:var(--acc);text-decoration:none}a:hover{text-decoration:underline}
@@ -18,7 +18,7 @@ th.s{cursor:pointer}td.n,th.n{text-align:end;font-variant-numeric:tabular-nums}
 .top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem}.tabs button{border:1px solid var(--line);background:var(--card);color:var(--fg);padding:.35rem .8rem;border-radius:6px;cursor:pointer;margin-inline-end:.3rem}
 .tabs button.on{background:var(--acc);color:#fff;border-color:var(--acc)}
 input{padding:.5rem;font-size:1rem;width:100%;box-sizing:border-box;background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:6px}
-.panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:1rem;margin-top:1.4rem}.panel h2{margin:0 0 .8rem}.panel .card{background:var(--bg)}
+.panel{background:var(--panel);border:1px solid var(--pline);border-radius:12px;padding:1rem;margin-top:1.4rem;box-shadow:0 2px 10px rgba(0,0,0,.25)}.panel h2{margin:0 0 .8rem}.panel .card{background:var(--inner);border-color:var(--iline)}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:1rem}@media(max-width:800px){.two{grid-template-columns:1fr}}
 .note{color:var(--mut);font-size:.8rem}
 .scroll{overflow-x:auto}
