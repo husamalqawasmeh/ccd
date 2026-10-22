@@ -15,7 +15,7 @@ table{border-collapse:collapse;width:100%;background:var(--card);border:1px soli
 th,td{padding:.45rem .6rem;border-bottom:1px solid var(--line);text-align:start}th{color:var(--mut);font-weight:500;cursor:default}
 th.s{cursor:pointer}td.n,th.n{text-align:end;font-variant-numeric:tabular-nums}
 .bar{height:6px;background:var(--acc);border-radius:3px;min-width:1px}
-.top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem}.tabs button{border:1px solid var(--line);background:var(--card);color:var(--fg);padding:.35rem .8rem;border-radius:6px;cursor:pointer;margin-inline-end:.3rem}
+.sw{display:flex;align-items:center;gap:.5rem;cursor:pointer;font-size:.9rem}.sw input{display:none}.trk{width:38px;height:22px;border-radius:11px;background:var(--iline);position:relative;transition:.15s}.trk:after{content:'';position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff;transition:.15s}.sw input:checked+.trk{background:var(--acc)}.sw input:checked+.trk:after{left:19px}.top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem}.tabs button{border:1px solid var(--line);background:var(--card);color:var(--fg);padding:.35rem .8rem;border-radius:6px;cursor:pointer;margin-inline-end:.3rem}
 .tabs button.on{background:var(--acc);color:#fff;border-color:var(--acc)}
 input{padding:.5rem;font-size:1rem;width:100%;box-sizing:border-box;background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:6px}
 .panel{background:var(--panel);border:1px solid var(--pline);border-radius:12px;padding:1rem;margin-top:1.4rem;box-shadow:0 2px 10px rgba(0,0,0,.25)}.panel h2{margin:0 0 .8rem}.panel .card{background:var(--inner);border-color:var(--iline)}
@@ -33,7 +33,7 @@ function num(x,d){if(x==null)return '–';var u=UNITS[unit];
 if(unit=='a'){var ax=Math.abs(x);u=ax>=1e9?UNITS.b:ax>=1e6?UNITS.m:ax>=1e4?UNITS.k:UNITS.x}
 if(u[0]>1&&Math.abs(x)>=u[0])return (x/u[0]).toLocaleString('en-US',{maximumFractionDigits:1})+u[1];
 return Number(x).toLocaleString('en-US',{maximumFractionDigits:d||0})}
-function unitBar(){return [['a','Auto'],['x','Exact'],['k','Thousands'],['m','Millions'],['b','Billions']].map(function(t){return '<button data-u='+t[0]+(t[0]==unit?' class=on':'')+'>'+t[1]+'</button>'}).join('')}
+function unitBar(){return '<label class=sw><input type=checkbox id=swc'+(unit=='a'?' checked':'')+'><span class=trk></span><span>Auto-round (K / M / B)</span></label>'}
 function pct(a,b){return b?(100*a/b).toFixed(1)+'%':'–'}
 function qs(o){return Object.keys(o).map(function(k){return k+'='+encodeURIComponent(o[k])}).join('&')}
 function card(l,v,s,href){return '<'+(href?'a href="'+href+'"':'div')+' class=card><div class=l>'+l+'</div><div class=v>'+v+'</div><div class=s>'+(s||'')+'</div></'+(href?'a':'div')+'>'}
@@ -128,8 +128,8 @@ function person(sp){
     '<div class=scroll><table><tr>'+(fam?'<th>Partner':'')+'<th>Company<th>Role<th class=n>Shares<th class=n>Value (JD)</tr>'+
     rows.map(function(r){return '<tr>'+(fam?'<td><a href="#/person?name='+encodeURIComponent(r.partner)+'">'+esc(r.partner)+'</a>':'')+'<td><a href="#/c/'+r.national_id+'">'+esc(r.company)+'</a><td>'+esc(r.role)+'<td class=n>'+num(r.shares)+'<td class=n>'+num(r.value)+'</tr>'}).join('')+'</table></div>'})}
 
-function setUnits(){$('#units').innerHTML='<span class=note>Round numbers to: </span>'+unitBar()}
-$('#units').onclick=function(e){if(e.target.dataset.u){unit=e.target.dataset.u;try{localStorage.setItem('unit',unit)}catch(x){}route()}};
+function setUnits(){$('#units').innerHTML='unitBar()}
+$('#units').onchange=function(e){if(e.target.id=='swc'){unit=e.target.checked?'a':'x';try{localStorage.setItem('unit',unit)}catch(x){}route()}};
 function route(){setUnits();
   var h=location.hash||'#/',m;
   if(m=h.match(/^#\/list\?(.*)$/))listView(m[1]);
