@@ -8,7 +8,10 @@ const PARTNER_ROWS = `SELECT p.national_id, c.name AS company, p.partner, p.role
   ROUND(p.shares * c.book_value_per_share, 2) AS value
   FROM partners p JOIN companies c USING(national_id) WHERE NOT ${LISTED}`;
 
-const ENTITY = /شركة|شركه|مؤسسة|مؤسسه|ليميتد|محدود|مجموعة|صندوق|بنك|مصرف|شركاه|ل?لتجارة|لتجارة|للاستثمار|لاستثمار|للخدمات|لخدمات|للصناعة|ش\.ذ|م\.م/;
+const ENTITY_RE = /شركة|شركه|مؤسسة|مؤسسه|ليميتد|محدود|مجموعة|صندوق|بنك|مصرف|شركاه|شريك|لتجارة|للاستثمار|لاستثمار|للخدمات|لخدمات|للصناعة|ش\.ذ|م\.م|[()/]|فرع|[ء-ي]-[ء-ي]/;
+const PERSON_L = new Set(["لقمان", "لطفي", "لبيب", "لؤي", "لجين", "لبنى", "ليث", "لينا", "ليلى", "لافي"]);
+// entity = name has a company word, or a later word starting with "ل" (e.g. "التوكيلات الذكية للمركبات")
+const ENTITY = { test: (n) => ENTITY_RE.test(n) || n.split(/\s+/).slice(1).some((t) => t.startsWith("ل") && t.length >= 4 && !PERSON_L.has(t)) };
 const norm = (s) => s.replace(/[أإآ]/g, "ا").replace(/ة/g, "ه").replace(/ى/g, "ي").trim();
 const familyOf = (name) => { const t = norm(name).split(/\s+/); return t.length > 1 ? t[t.length - 1] : null; };
 
