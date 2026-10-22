@@ -57,7 +57,7 @@ function dashboard(){
       card('Average capital (JD)',num(cap/ncap),'all with capital',L({capital:1}))+
       card('Listed capital (JD)',num(A.cap),pct(A.cap,cap)+' of total · avg '+num(A.avgcap),L({listed:1}))+
       card('Unlisted capital (JD)',num(U.cap),pct(U.cap,cap)+' of total · avg '+num(U.avgcap)+' · '+num(U.ncap)+' with capital',L({listed:0,capital:1}))+
-    '</div></div><h2>ASE statistics</h2><div class=grid>'+
+    '</div></div><div class=panel><h2>ASE statistics</h2><div class=grid>'+
       card('Listed companies',num(A.n),'ASE symbol on record',L({listed:1}))+
       card('With market price',num(A.nprice),pct(A.nprice,A.n)+' of listed',L({listed:1,priced:1,sort:'mcap'}))+
       card('Total market cap (JD)',num(A.mcap),'priced companies only',L({listed:1,priced:1,sort:'mcap'}))+
@@ -65,7 +65,7 @@ function dashboard(){
       card('Avg share price (JD)',num(A.avgprice,2),'simple average',L({listed:1,priced:1,sort:'mcap'}))+
       card('Trading above par',num(A.above_par),'market cap &gt; capital',L({listed:1,priced:1}))+
       card('Trading below par',num(A.below_par),'market cap &lt; capital',L({listed:1,priced:1,dir:'asc',sort:'mcap'}))+
-    '</div><h2>Partners in unlisted companies</h2><div class=grid>'+
+    '</div></div><h2>Partners in unlisted companies</h2><div class=grid>'+
       card('Companies with partner data',num(P.companies),pct(P.companies,P.unlisted)+' of '+num(P.unlisted)+' unlisted',L({listed:0,haspartners:1,sort:'partners'}))+
       card('Partner records',num(P.rows),'',L({listed:0,haspartners:1,sort:'partners'}))+
       card('Avg partners / company',(P.rows/P.companies).toFixed(2),'among companies with partner data',L({listed:0,haspartners:1,sort:'partners'}))+
