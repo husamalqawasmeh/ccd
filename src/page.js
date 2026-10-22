@@ -15,7 +15,7 @@ table{border-collapse:collapse;width:100%;background:var(--card);border:1px soli
 th,td{padding:.45rem .6rem;border-bottom:1px solid var(--line);text-align:start}th{color:var(--mut);font-weight:500;cursor:default}
 th.s{cursor:pointer}td.n,th.n{text-align:end;font-variant-numeric:tabular-nums}
 .bar{height:6px;background:var(--acc);border-radius:3px;min-width:1px}
-.tabs button{border:1px solid var(--line);background:var(--card);color:var(--fg);padding:.35rem .8rem;border-radius:6px;cursor:pointer;margin-inline-end:.3rem}
+.top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem}.tabs button{border:1px solid var(--line);background:var(--card);color:var(--fg);padding:.35rem .8rem;border-radius:6px;cursor:pointer;margin-inline-end:.3rem}
 .tabs button.on{background:var(--acc);color:#fff;border-color:var(--acc)}
 input{padding:.5rem;font-size:1rem;width:100%;box-sizing:border-box;background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:6px}
 .panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:1rem;margin-top:1.4rem}.panel h2{margin:0 0 .8rem}.panel .card{background:var(--bg)}
@@ -23,11 +23,16 @@ input{padding:.5rem;font-size:1rem;width:100%;box-sizing:border-box;background:v
 .note{color:var(--mut);font-size:.8rem}
 .scroll{overflow-x:auto}
 </style>
-<main><h1><a href="#/">Jordan Companies Overview</a></h1><div id=app>Loading…</div></main>
+<main><div class=top><h1><a href="#/">Jordan Companies Overview</a></h1><div class=tabs id=units></div></div><div id=app>Loading…</div></main>
 <script>
 var app=document.getElementById('app'),$=function(s){return document.querySelector(s)};
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
-function num(x,d){return x==null?'–':Number(x).toLocaleString('en-US',{maximumFractionDigits:d||0})}
+var UNITS={x:[1,''],k:[1e3,'K'],m:[1e6,'M'],b:[1e9,'B']},unit='x';
+try{unit=localStorage.getItem('unit')||'x'}catch(e){}
+function num(x,d){if(x==null)return '–';var u=UNITS[unit];
+if(u[0]>1&&Math.abs(x)>=u[0])return (x/u[0]).toLocaleString('en-US',{maximumFractionDigits:1})+u[1];
+return Number(x).toLocaleString('en-US',{maximumFractionDigits:d||0})}
+function unitBar(){return [['x','Exact'],['k','Thousands'],['m','Millions'],['b','Billions']].map(function(t){return '<button data-u='+t[0]+(t[0]==unit?' class=on':'')+'>'+t[1]+'</button>'}).join('')}
 function pct(a,b){return b?(100*a/b).toFixed(1)+'%':'–'}
 function qs(o){return Object.keys(o).map(function(k){return k+'='+encodeURIComponent(o[k])}).join('&')}
 function card(l,v,s,href){return '<'+(href?'a href="'+href+'"':'div')+' class=card><div class=l>'+l+'</div><div class=v>'+v+'</div><div class=s>'+(s||'')+'</div></'+(href?'a':'div')+'>'}
@@ -121,7 +126,9 @@ function person(sp){
     '<div class=scroll><table><tr>'+(fam?'<th>Partner':'')+'<th>Company<th>Role<th class=n>Shares<th class=n>Value (JD)</tr>'+
     rows.map(function(r){return '<tr>'+(fam?'<td><a href="#/person?name='+encodeURIComponent(r.partner)+'">'+esc(r.partner)+'</a>':'')+'<td><a href="#/c/'+r.national_id+'">'+esc(r.company)+'</a><td>'+esc(r.role)+'<td class=n>'+num(r.shares)+'<td class=n>'+num(r.value)+'</tr>'}).join('')+'</table></div>'})}
 
-function route(){
+function setUnits(){$('#units').innerHTML='<span class=note>Round numbers to: </span>'+unitBar()}
+$('#units').onclick=function(e){if(e.target.dataset.u){unit=e.target.dataset.u;try{localStorage.setItem('unit',unit)}catch(x){}route()}};
+function route(){setUnits();
   var h=location.hash||'#/',m;
   if(m=h.match(/^#\/list\?(.*)$/))listView(m[1]);
   else if(h=='#/list')listView('');
