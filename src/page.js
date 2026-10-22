@@ -90,8 +90,8 @@ function dashboard(){
       var tv=d.reduce(function(a,r){return a+r.value},0),ts=d.reduce(function(a,r){return a+r.shares},0);
       $('#ptable').innerHTML='<table><tr><th>'+(mode=='fam'?'Family':mode=='ent'?'Entity':'Individual')+(mode=='fam'?'<th class=n>Members':'')+'<th class=n>Companies<th class=n>Total shares<th class=n>Share value (JD)<th class=n>% of total</tr>'+
         '<tr><td><b>Total ('+num(d.length)+')</b>'+(mode=='fam'?'<td class=n>'+num(d.reduce(function(a,r){return a+r.members},0)):'')+'<td><td class=n><b>'+num(ts)+'</b><td class=n><b>'+num(tv)+'</b><td></tr>'+
-        d.slice(0,300).map(function(r){var h=mode=='fam'?'#/person?family='+encodeURIComponent(r.name):'#/person?name='+encodeURIComponent(r.name);
-          return '<tr><td><a href="'+h+'">'+esc(r.name)+'</a>'+(mode=='fam'?'<td class=n>'+r.members:'')+'<td class=n>'+r.companies+'<td class=n>'+num(r.shares)+'<td class=n>'+num(r.value)+'<td class=n>'+pct(r.value,tv)+'</tr>'}).join('')+'</table>'+(d.length>300?'<p class=note>Showing top 300 of '+d.length+'.</p>':'');
+        d.map(function(r){var h=mode=='fam'?'#/person?family='+encodeURIComponent(r.name):'#/person?name='+encodeURIComponent(r.name);
+          return '<tr><td><a href="'+h+'">'+esc(r.name)+'</a>'+(mode=='fam'?'<td class=n>'+r.members:'')+'<td class=n>'+r.companies+'<td class=n>'+num(r.shares)+'<td class=n>'+num(r.value)+'<td class=n>'+pct(r.value,tv)+'</tr>'}).join('')+'</table>';
     }
     $('#tabs').onclick=function(e){if(e.target.dataset.m){mode=e.target.dataset.m;render()}};
     render();
