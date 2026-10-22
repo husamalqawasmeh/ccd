@@ -15,7 +15,7 @@ table{border-collapse:collapse;width:100%;background:var(--card);border:1px soli
 th,td{padding:.45rem .6rem;border-bottom:1px solid var(--line);text-align:start}th{color:var(--mut);font-weight:500;cursor:default}
 th.s{cursor:pointer}td.n,th.n{text-align:end;font-variant-numeric:tabular-nums}
 .bar{height:6px;background:var(--acc);border-radius:3px;min-width:1px}
-.sw{display:flex;align-items:center;gap:.5rem;cursor:pointer;font-size:.9rem}.sw input{display:none}.trk{width:38px;height:22px;border-radius:11px;background:var(--iline);position:relative;transition:.15s}.trk:after{content:'';position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff;transition:.15s}.sw input:checked+.trk{background:var(--acc)}.sw input:checked+.trk:after{left:19px}.top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem}.tabs button{border:1px solid var(--line);background:var(--card);color:var(--fg);padding:.35rem .8rem;border-radius:6px;cursor:pointer;margin-inline-end:.3rem}
+.sw{display:flex;align-items:center;gap:.5rem;cursor:pointer;font-size:.9rem}.sw input{display:none}.trk{width:38px;height:22px;border-radius:11px;background:var(--iline);position:relative;transition:.15s}.trk:after{content:'';position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff;transition:.15s}.sw input:checked+.trk{background:var(--acc)}.sw input:checked+.trk:after{left:19px}.back{display:inline-flex;align-items:center;gap:.45rem;background:#1f9d55;color:#fff!important;padding:.45rem 1rem;border-radius:8px;font-weight:600;box-shadow:0 1px 4px rgba(0,0,0,.3)}.back span{font-size:1.5rem;line-height:1}.back:hover{background:#17a35a;text-decoration:none}.top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem}.tabs button{border:1px solid var(--line);background:var(--card);color:var(--fg);padding:.35rem .8rem;border-radius:6px;cursor:pointer;margin-inline-end:.3rem}
 .tabs button.on{background:var(--acc);color:#fff;border-color:var(--acc)}
 input{padding:.5rem;font-size:1rem;width:100%;box-sizing:border-box;background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:6px}
 .panel{background:var(--panel);border:1px solid var(--pline);border-radius:12px;padding:1rem;margin-top:1.4rem;box-shadow:0 2px 10px rgba(0,0,0,.25)}.panel h2{margin:0 0 .8rem}tbody tr:nth-child(even) td{background:rgba(128,140,160,.12)}tbody tr:hover td{background:rgba(31,111,235,.14)}
@@ -109,7 +109,7 @@ function listView(sp){
     var nav='';
     if(off>0)nav+='<a href="'+L(Object.assign({},p,{offset:Math.max(0,off-100)}))+'">← Prev</a> ';
     if(off+100<d.total)nav+='<a href="'+L(Object.assign({},p,{offset:off+100}))+'">Next →</a>';
-    app.innerHTML='<p><a href="#/">← Overview</a></p><h2>'+num(d.total)+' companies</h2><p class=note>'+(chips||'All companies')+'</p>'+
+    app.innerHTML='<p><a class=back href="#/"><span>←</span> Overview</a></p><h2>'+num(d.total)+' companies</h2><p class=note>'+(chips||'All companies')+'</p>'+
     '<div class=scroll><table><tr>'+sortLink('name','Company')+'<th>Type<th>Status<th>Governorate'+sortLink('capital','Capital (JD)','n')+'<th>ASE'+sortLink('mcap','Market cap (JD)','n')+sortLink('partners','Partners','n')+'</tr>'+
     d.rows.map(function(r){return '<tr><td><a href="#/c/'+r.national_id+'">'+esc(r.name)+'</a><td>'+esc(r.type)+'<td>'+esc(r.status)+'<td>'+esc(r.governorate)+'<td class=n>'+num(r.capital_jd)+'<td>'+esc(r.ase_symbol)+'<td class=n>'+num(r.market_cap_jd)+'<td class=n>'+(r.npartners||'')+'</tr>'}).join('')+'</table></div><p>'+nav+'</p>'})}
 
@@ -117,7 +117,7 @@ function company(id){
   app.innerHTML='Loading…';
   get('/api/companies/'+id).then(function(c){
     var f=[['National ID',c.national_id],['Type',c.type],['Status',c.status],['Governorate',c.governorate],['Capital (JD)',num(c.capital_jd)],['Shares',num(c.shares)],['Shares source',c.shares_source],['Book value / share',c.book_value_per_share],['ASE symbol',c.ase_symbol],['Market price (JD)',c.market_price_jd],['Market cap (JD)',num(c.market_cap_jd)]];
-    app.innerHTML='<p><a href="javascript:history.back()">← Back</a></p><h2>'+esc(c.name)+'</h2><table>'+f.map(function(r){return '<tr><th>'+r[0]+'<td>'+esc(r[1])+'</tr>'}).join('')+'</table>'+
+    app.innerHTML='<p><a class=back href="javascript:history.back()"><span>←</span> Back</a></p><h2>'+esc(c.name)+'</h2><table>'+f.map(function(r){return '<tr><th>'+r[0]+'<td>'+esc(r[1])+'</tr>'}).join('')+'</table>'+
     (c.partners.length?'<h3>Partners ('+c.partners.length+')</h3><table><tr><th>Name<th>Role<th>Nationality<th class=n>Shares<th class=n>%</tr>'+c.partners.map(function(p){return '<tr><td><a href="#/person?name='+encodeURIComponent(p.partner)+'">'+esc(p.partner)+'</a><td>'+esc(p.role)+'<td>'+esc(p.nationality)+'<td class=n>'+num(p.shares)+'<td class=n>'+pct(p.shares,c.shares)+'</tr>'}).join('')+'</table>':'<p class=note>No partner data.</p>')})}
 
 function person(sp){
@@ -125,7 +125,7 @@ function person(sp){
   app.innerHTML='Loading…';
   get('/api/person?'+qs(p)).then(function(rows){
     var tv=rows.reduce(function(a,r){return a+(r.value||0)},0),ts=rows.reduce(function(a,r){return a+(r.shares||0)},0),fam=!!p.family;
-    app.innerHTML='<p><a href="javascript:history.back()">← Back</a></p><h2>'+esc(p.family?'Family: '+p.family:p.name)+'</h2>'+
+    app.innerHTML='<p><a class=back href="javascript:history.back()"><span>←</span> Back</a></p><h2>'+esc(p.family?'Family: '+p.family:p.name)+'</h2>'+
     '<div class=grid>'+card('Holdings',num(rows.length),'')+card('Total shares',num(ts),'')+card('Share value (JD)',num(tv),'')+'</div><br>'+
     '<div class=scroll><table><tr>'+(fam?'<th>Partner':'')+'<th>Company<th>Role<th class=n>Shares<th class=n>Value (JD)</tr>'+
     rows.map(function(r){return '<tr>'+(fam?'<td><a href="#/person?name='+encodeURIComponent(r.partner)+'">'+esc(r.partner)+'</a>':'')+'<td><a href="#/c/'+r.national_id+'">'+esc(r.company)+'</a><td>'+esc(r.role)+'<td class=n>'+num(r.shares)+'<td class=n>'+num(r.value)+'</tr>'}).join('')+'</table></div>'})}
