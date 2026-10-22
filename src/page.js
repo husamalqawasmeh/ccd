@@ -18,6 +18,7 @@ th.s{cursor:pointer}td.n,th.n{text-align:end;font-variant-numeric:tabular-nums}
 .tabs button{border:1px solid var(--line);background:var(--card);color:var(--fg);padding:.35rem .8rem;border-radius:6px;cursor:pointer;margin-inline-end:.3rem}
 .tabs button.on{background:var(--acc);color:#fff;border-color:var(--acc)}
 input{padding:.5rem;font-size:1rem;width:100%;box-sizing:border-box;background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:6px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:1rem;margin-top:1.4rem}.panel h2{margin:0 0 .8rem}.panel .card{background:var(--bg)}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:1rem}@media(max-width:800px){.two{grid-template-columns:1fr}}
 .note{color:var(--mut);font-size:.8rem}
 .scroll{overflow-x:auto}
@@ -43,7 +44,7 @@ function dashboard(){
   Promise.all([get('/api/stats'),get('/api/people?mode=fam'),get('/api/people?mode=ind')]).then(function(x){
     var s=x[0],by={};s.byListed.forEach(function(r){by[r.listed]=r});
     var A=by[1],U=by[0],tot=A.n+U.n,cap=A.cap+U.cap,ncap=A.ncap+U.ncap,P=s.partners;
-    var h='<h2>Companies</h2><div class=grid>'+
+    var h='<div class=panel><h2>Companies</h2><div class=grid>'+
       card('Total companies',num(tot),'all registered',L({}))+
       card('Listed on ASE',num(A.n),pct(A.n,tot)+' of all',L({listed:1}))+
       card('Not listed',num(U.n),pct(U.n,tot)+' of all',L({listed:0}))+
@@ -51,7 +52,7 @@ function dashboard(){
       card('Average capital (JD)',num(cap/ncap),'all with capital',L({capital:1}))+
       card('Listed capital (JD)',num(A.cap),pct(A.cap,cap)+' of total · avg '+num(A.avgcap),L({listed:1}))+
       card('Unlisted capital (JD)',num(U.cap),pct(U.cap,cap)+' of total · avg '+num(U.avgcap)+' · '+num(U.ncap)+' with capital',L({listed:0,capital:1}))+
-    '</div><h2>ASE statistics</h2><div class=grid>'+
+    '</div></div><h2>ASE statistics</h2><div class=grid>'+
       card('Listed companies',num(A.n),'ASE symbol on record',L({listed:1}))+
       card('With market price',num(A.nprice),pct(A.nprice,A.n)+' of listed',L({listed:1,priced:1,sort:'mcap'}))+
       card('Total market cap (JD)',num(A.mcap),'priced companies only',L({listed:1,priced:1,sort:'mcap'}))+
