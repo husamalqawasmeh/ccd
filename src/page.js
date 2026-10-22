@@ -42,7 +42,7 @@ function L(p){return '#/list?'+qs(p)}
 
 function breakdown(title,rows,key,total){
   var max=Math.max.apply(null,rows.map(function(r){return r.n}));
-  return '<h3>By '+title+'</h3><p class=note>Classification of companies — all, ASE-listed and not listed</p><div class=scroll><table><tr><th>'+esc(title)+'<th class=n>All<th class=n>% of all<th class=n>Listed<th class=n>Not listed<th class=n>Capital (JD)<th style="width:10%"></tr>'+
+  return '<h3>By '+title+'</h3><div class=scroll><table><tr><th>'+esc(title)+'<th class=n>All<th class=n>% of all<th class=n>Listed<th class=n>Not listed<th class=n>Capital (JD)<th style="width:10%"></tr>'+
   rows.map(function(r){var p={};p[key]=r.k==null?'':r.k;var a=function(l){var q=Object.assign({listed:l},p);return L(q)};
   return '<tr><td><a href="'+L(p)+'">'+esc(r.k||'(none)')+'</a><td class=n><a href="'+L(p)+'">'+num(r.n)+'</a><td class=n>'+pct(r.n,total)+'<td class=n><a href="'+a(1)+'">'+num(r.listed)+'</a><td class=n><a href="'+a(0)+'">'+num(r.n-r.listed)+'</a><td class=n>'+num(r.cap)+'<td><div class=bar style="width:'+(100*r.n/max)+'%"></div></tr>'}).join('')+'</table></div>'}
 
@@ -72,9 +72,9 @@ function dashboard(){
       card('Partner records',num(P.rows),'',L({listed:0,haspartners:1,sort:'partners'}))+
       card('Avg partners / company',(P.rows/P.companies).toFixed(2),'among companies with partner data',L({listed:0,haspartners:1,sort:'partners'}))+
       card('Distinct partners',num(P.people),'unique names','#/people')+
-    '</div></div><div class=two><div>'+
+    '</div></div><div class=panel><h2>Classification of companies — all, ASE-listed and not listed</h2><div class=two><div>'+
       breakdown('Type',s.byType,'type',tot)+'</div><div>'+breakdown('Status',s.byStatus,'status',tot)+'</div></div>'+
-    '<div class=two><div>'+breakdown('Governorate',s.byGov,'gov',tot)+'</div><div>'+breakdown('Share data source',s.bySrc,'src',tot)+'</div></div>'+
+    '<div class=two><div>'+breakdown('Governorate',s.byGov,'gov',tot)+'</div><div>'+breakdown('Share data source',s.bySrc,'src',tot)+'</div></div></div>'+
     '<div class=two><div><h3>Top ASE by market cap</h3><table><tr><th>Company<th>Symbol<th class=n>Market cap (JD)</tr>'+
       s.topAse.map(function(r){return '<tr><td><a href="#/c/'+r.national_id+'">'+esc(r.name)+'</a><td>'+esc(r.ase_symbol)+'<td class=n>'+num(r.market_cap_jd)+'</tr>'}).join('')+'</table></div>'+
     '<div><h3>Largest unlisted by capital</h3><table><tr><th>Company<th class=n>Capital (JD)</tr>'+
