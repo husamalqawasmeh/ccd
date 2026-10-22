@@ -75,10 +75,10 @@ function dashboard(){
     '</div></div><div class=panel><h2>Classification of companies — all, ASE-listed and not listed</h2><div class=two><div>'+
       breakdown('Type',s.byType,'type',tot)+'</div><div>'+breakdown('Status',s.byStatus,'status',tot)+'</div></div>'+
     '<div class=two><div>'+breakdown('Governorate',s.byGov,'gov',tot)+'</div><div>'+breakdown('Share data source',s.bySrc,'src',tot)+'</div></div></div>'+
-    '<div class=two><div><h3>Top ASE by market cap</h3><table><tr><th>Company<th>Symbol<th class=n>Market cap (JD)</tr>'+
+    '<div class=panel><div class=two><div><h3>Top ASE by market cap</h3><table><tr><th>Company<th>Symbol<th class=n>Market cap (JD)</tr>'+
       s.topAse.map(function(r){return '<tr><td><a href="#/c/'+r.national_id+'">'+esc(r.name)+'</a><td>'+esc(r.ase_symbol)+'<td class=n>'+num(r.market_cap_jd)+'</tr>'}).join('')+'</table></div>'+
     '<div><h3>Largest unlisted by capital</h3><table><tr><th>Company<th class=n>Capital (JD)</tr>'+
-      s.topUnlisted.map(function(r){return '<tr><td><a href="#/c/'+r.national_id+'">'+esc(r.name)+'</a><td class=n>'+num(r.capital_jd)+'</tr>'}).join('')+'</table></div></div>'+
+      s.topUnlisted.map(function(r){return '<tr><td><a href="#/c/'+r.national_id+'">'+esc(r.name)+'</a><td class=n>'+num(r.capital_jd)+'</tr>'}).join('')+'</table></div></div></div>'+
     '<h2 id=ps>Partner shares — unlisted companies</h2><div class=tabs id=tabs></div><p class=note id=pnote></p><div id=ptable class=scroll></div>';
     app.innerHTML=h;
     var data={fam:x[1],ind:x[2]},mode=location.hash.indexOf('mode=ind')>0?'ind':'fam';
